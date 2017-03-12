@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://dmall.com/schema/pipeline"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	targetNamespace="http://dmall.com/schema/pipeline">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+
+	<xsd:element name="pipeline">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:sequence>
+						<xsd:element ref="processor" minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+					<xsd:attribute name="isolation" type="isolationType"
+						use="optional" />
+					<xsd:attribute name="propagation" type="propagationType"
+						use="optional" />
+					<xsd:attribute name="headProcessor" type="xsd:string"
+						use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+
+	<xsd:element name="processor">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:sequence>
+						<xsd:element ref="result" minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+					<xsd:attribute name="ref" type="xsd:string" use="required" />
+					<xsd:attribute name="isolation" type="isolationType"
+						use="optional" />
+					<xsd:attribute name="propagation" type="propagationType"
+						use="optional" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="result">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="value" type="xsd:int" use="required" />
+					<xsd:attribute name="nextProcessor" type="xsd:string"
+						use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+
+	<xsd:simpleType name="isolationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DEFAULT" />
+			<xsd:enumeration value="READ_UNCOMMITTED" />
+			<xsd:enumeration value="READ_COMMITTED" />
+			<xsd:enumeration value="REPEATABLE_READ" />
+			<xsd:enumeration value="SERIALIZABLE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="propagationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="REQUIRED" />
+			<xsd:enumeration value="SUPPORTS" />
+			<xsd:enumeration value="MANDATORY" />
+			<xsd:enumeration value="REQUIRES_NEW" />
+			<xsd:enumeration value="NOT_SUPPORTED" />
+			<xsd:enumeration value="NEVER" />
+			<xsd:enumeration value="NESTED" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+</xsd:schema>
