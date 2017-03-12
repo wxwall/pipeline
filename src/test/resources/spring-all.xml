@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:pl="http://dmall.com/schema/pipeline" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       xmlns:pl="http://skynet.com/schema/pipeline" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd 
-       http://dmall.com/schema/pipeline 
-       http://dmall.com/schema/pipeline.xsd">
+       http://skynet.com/schema/pipeline
+       http://skynet.com/schema/pipeline.xsd">
 
-	<pl:pipeline headProcessor="registerUser" id="registerBiz">
-		<pl:processor ref="registerUserProc" id="registerUser" propagation="NOT_SUPPORTED">
-			<pl:result nextProcessor="sendEmail" value="1" />
-		</pl:processor>
-		<pl:processor ref="sendEmailProc" id="sendEmail" >
-		</pl:processor>
-	</pl:pipeline>
+    <pl:pipeline headProcessor="registerUser" id="registerBiz">
+        <pl:processor ref="registerUserProc" id="registerUser" propagation="NOT_SUPPORTED">
+            <pl:result nextProcessor="sendEmail" value="Send_Email"/>
+        </pl:processor>
+        <pl:processor ref="sendEmailProc" id="sendEmail">
+        </pl:processor>
+    </pl:pipeline>
 
-	<bean id="pipelineEngine" class="com.dmall.pipeline.PipelineEngine"
-		init-method="init">
-		<property name="transactionManager" ref="transactionManager"/>
-	</bean>
+    <bean id="pipelineEngine" class="com.skynet.pipeline.PipelineEngine" init-method="init">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
 
-	<bean id="registerUserProc" class="RegisterProcessor"></bean>
-	<bean id="sendEmailProc" class="SendEmailProcessor"></bean>
+    <bean id="registerUserProc" class="RegisterProcessor"></bean>
+    <bean id="sendEmailProc" class="SendEmailProcessor"></bean>
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
-		<property name="driverClassName" value="org.h2.Driver" />
-		<property name="url" value="jdbc:h2:mem:test" />
-		<property name="username" value="sa" />
-		<property name="password" value="" />
-	</bean>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:test"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 </beans>

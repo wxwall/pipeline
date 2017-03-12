@@ -1,4 +1,4 @@
-package com.dmall.pipeline;
+package com.skynet.pipeline;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public class Processor {
 
     private Propagation propagation;
 
-    private Map<Integer, Processor> results;
+    private Map<String, Processor> results;
 
     public AbstractPipelineProcessor getBeanRef() {
         this.beanRef.setProcessorDef(this);
@@ -34,7 +34,7 @@ public class Processor {
         return this.propagation;
     }
 
-    public Map<Integer, Processor> getResults() {
+    public Map<String, Processor> getResults() {
         return this.results;
     }
 
@@ -54,7 +54,7 @@ public class Processor {
         this.propagation = propagation;
     }
 
-    public void setResults(final Map<Integer, Processor> results) {
+    public void setResults(final Map<String, Processor> results) {
         this.results = results;
     }
 

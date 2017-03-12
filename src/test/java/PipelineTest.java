@@ -1,8 +1,8 @@
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.dmall.pipeline.PipelineEngine;
-import com.dmall.pipeline.PipelineException;
+import com.skynet.pipeline.PipelineEngine;
+import com.skynet.pipeline.PipelineException;
 
 public class PipelineTest {
 

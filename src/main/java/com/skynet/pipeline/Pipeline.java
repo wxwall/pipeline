@@ -1,4 +1,4 @@
-package com.dmall.pipeline;
+package com.skynet.pipeline;
 
 import java.util.Map;
 

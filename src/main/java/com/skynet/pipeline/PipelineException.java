@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.dmall.pipeline;
+package com.skynet.pipeline;
 
 /**
  * @author GaoPeng

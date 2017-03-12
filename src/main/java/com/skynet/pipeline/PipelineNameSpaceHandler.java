@@ -1,4 +1,4 @@
-package com.dmall.pipeline;
+package com.skynet.pipeline;
 
 import java.util.List;
 
@@ -17,13 +17,10 @@ import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
 public class PipelineNameSpaceHandler extends NamespaceHandlerSupport {
-    private static class PipelineBeanDefinitionParser extends
-            AbstractSingleBeanDefinitionParser {
+    private static class PipelineBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
         @Override
-        protected void doParse(final Element element,
-                final ParserContext parserContext,
-                final BeanDefinitionBuilder builder) {
+        protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
             builder.setScope(BeanDefinition.SCOPE_SINGLETON);
             final String id = element.getAttribute("id");
             if (StringUtils.hasText(id)) {
@@ -35,27 +32,22 @@ public class PipelineNameSpaceHandler extends NamespaceHandlerSupport {
             }
             final String isolation = element.getAttribute("isolation");
             if (StringUtils.hasText(isolation)) {
-                builder.addPropertyValue("isolation",
-                        Isolation.valueOf(isolation));
+                builder.addPropertyValue("isolation", Isolation.valueOf(isolation));
             }
             final String propagation = element.getAttribute("propagation");
             if (StringUtils.hasText(propagation)) {
-                builder.addPropertyValue("propagation",
-                        Propagation.valueOf(propagation));
+                builder.addPropertyValue("propagation", Propagation.valueOf(propagation));
             }
-            final List<Element> processorElements = DomUtils
-                    .getChildElements(element);
+            final List<Element> processorElements = DomUtils.getChildElements(element);
             if (CollectionUtils.isEmpty(processorElements)) {
                 return;
             }
             final ManagedMap<String, Object> processors = new ManagedMap<String, Object>();
             processors.setMergeEnabled(true);
-            processors.setSource(parserContext.getReaderContext()
-                    .extractSource(element));
+            processors.setSource(parserContext.getReaderContext().extractSource(element));
             for (final Element processorElement : processorElements) {
                 final String processorId = processorElement.getAttribute("id");
-                processors.put(processorId, parserContext.getDelegate()
-                        .parseCustomElement(processorElement));
+                processors.put(processorId, parserContext.getDelegate().parseCustomElement(processorElement));
             }
             builder.addPropertyValue("processors", processors);
         }
@@ -67,12 +59,9 @@ public class PipelineNameSpaceHandler extends NamespaceHandlerSupport {
 
     }
 
-    private static class ProcessorBeanDefinitionParser extends
-            AbstractSingleBeanDefinitionParser {
+    private static class ProcessorBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
         @Override
-        protected void doParse(final Element element,
-                final ParserContext parserContext,
-                final BeanDefinitionBuilder builder) {
+        protected void doParse(final Element element, final ParserContext parserContext, final BeanDefinitionBuilder builder) {
             builder.setScope(BeanDefinition.SCOPE_SINGLETON);
             final String id = element.getAttribute("id");
             if (StringUtils.hasText(id)) {
@@ -80,37 +69,30 @@ public class PipelineNameSpaceHandler extends NamespaceHandlerSupport {
             }
             final String isolation = element.getAttribute("isolation");
             if (StringUtils.hasText(isolation)) {
-                builder.addPropertyValue("isolation",
-                        Isolation.valueOf(isolation));
+                builder.addPropertyValue("isolation", Isolation.valueOf(isolation));
             } else {
                 builder.addPropertyValue("isolation", Isolation.DEFAULT);
             }
             final String propagation = element.getAttribute("propagation");
             if (StringUtils.hasText(propagation)) {
-                builder.addPropertyValue("propagation",
-                        Propagation.valueOf(propagation));
+                builder.addPropertyValue("propagation", Propagation.valueOf(propagation));
             } else {
                 builder.addPropertyValue("propagation", Propagation.REQUIRED);
             }
             final String ref = element.getAttribute("ref");
             builder.addPropertyReference("beanRef", ref);
-            final List<Element> resultElements = DomUtils
-                    .getChildElementsByTagName(element, "result");
+            final List<Element> resultElements = DomUtils.getChildElementsByTagName(element, "result");
             if (CollectionUtils.isEmpty(resultElements)) {
                 return;
             }
 
-            final ManagedMap<Integer, Object> results = new ManagedMap<Integer, Object>();
+            final ManagedMap<String, Object> results = new ManagedMap<String, Object>();
             results.setMergeEnabled(true);
-            results.setSource(parserContext.getReaderContext().extractSource(
-                    element));
+            results.setSource(parserContext.getReaderContext().extractSource(element));
             for (final Element resultElement : resultElements) {
-                final Integer value = Integer.valueOf(resultElement
-                        .getAttribute("value"));
-                final RuntimeBeanReference nextRef = new RuntimeBeanReference(
-                        resultElement.getAttribute("nextProcessor"), false);
-                nextRef.setSource(parserContext.getReaderContext()
-                        .extractSource(element));
+                final String value = resultElement.getAttribute("value");
+                final RuntimeBeanReference nextRef = new RuntimeBeanReference(resultElement.getAttribute("nextProcessor"), false);
+                nextRef.setSource(parserContext.getReaderContext().extractSource(element));
                 results.put(value, nextRef);
             }
             builder.addPropertyValue("results", results);
@@ -123,10 +105,8 @@ public class PipelineNameSpaceHandler extends NamespaceHandlerSupport {
     }
 
     public void init() {
-        this.registerBeanDefinitionParser("pipeline",
-                new PipelineBeanDefinitionParser());
-        this.registerBeanDefinitionParser("processor",
-                new ProcessorBeanDefinitionParser());
+        this.registerBeanDefinitionParser("pipeline", new PipelineBeanDefinitionParser());
+        this.registerBeanDefinitionParser("processor", new ProcessorBeanDefinitionParser());
     }
 
 }
